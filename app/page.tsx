@@ -1,65 +1,116 @@
-import Image from "next/image";
+import TerminalOverlay from "./components/TerminalOverlay";
+// import { Button } from "./components/ui/button";
+import UserPrograms from "./components/UserPrograms";
+// import { ArrowRightIcon } from "lucide-react";
+import ClientModalWrapper from "./components/ui/ClientModalWrapper";
 
-export default function Home() {
+// import Link from "next/link";
+
+const HomePage = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col min-h-screen text-foreground overflow-hidden">
+      <section className="relative z-10 py-24 flex-grow">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative">
+            {/* CORNER DECARATION */}
+            <div className="absolute -top-10 left-0 w-40 h-40 border-l-2 border-t-2" />
+
+            {/* LEFT SIDE CONTENT */}
+            <div className="lg:col-span-7 space-y-8 relative">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+                <div>
+                  <span className="text-foreground">Transform</span>
+                </div>
+                <div>
+                  <span className="text-primary">Your Body</span>
+                </div>
+                <div className="pt-2">
+                  <span className="text-foreground">With Advanced</span>
+                </div>
+                <div className="pt-2">
+                  <span className="text-foreground">AI</span>
+                  <span className="text-primary"> Technology</span>
+                </div>
+              </h1>
+
+              {/* SEPERATOR LINE */}
+              <div className="h-px w-full bg-gradient-to-r from-primary via-secondary to-primary opacity-50"></div>
+
+              <p className="text-xl text-muted-foreground w-2/3">
+                Talk to our AI assistant and get personalized diet plans and workout routines
+                designed just for you
+              </p>
+
+              {/* STATS */}
+              <div className="flex items-center gap-10 py-6 font-mono">
+                <div className="flex flex-col">
+                  <div className="text-2xl text-primary">500+</div>
+                  <div className="text-xs uppercase tracking-wider">ACTIVE USERS</div>
+                </div>
+                <div className="h-12 w-px bg-gradient-to-b from-transparent via-border to-transparent"></div>
+                <div className="flex flex-col">
+                  <div className="text-2xl text-primary">3min</div>
+                  <div className="text-xs uppercase tracking-wider">GENERATION</div>
+                </div>
+                <div className="h-12 w-px bg-gradient-to-b from-transparent via-border to-transparent"></div>
+                <div className="flex flex-col">
+                  <div className="text-2xl text-primary">100%</div>
+                  <div className="text-xs uppercase tracking-wider">PERSONALIZED</div>
+                </div>
+              </div>
+
+              {/* BUTTON */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                <ClientModalWrapper />
+              </div>
+            </div>
+
+            {/* RIGHT SIDE CONTENT */}
+            <div className="lg:col-span-5 relative">
+              {/* CORNER PIECES */}
+              <div className="absolute -inset-4 pointer-events-none">
+                <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-border" />
+                <div className="absolute top-0 right-0 w-16 h-16 border-r-2 border-t-2 border-border" />
+                <div className="absolute bottom-0 left-0 w-16 h-16 border-l-2 border-b-2 border-border" />
+                <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-border" />
+              </div>
+
+              {/* IMAGE CONTANINER */}
+              <div className="relative aspect-square max-w-lg mx-auto">
+                <div className="relative overflow-hidden rounded-lg bg-cyber-black">
+                  <img
+                    src="/OIP.png"
+                    alt="AI Fitness Coach"
+                    className="size-full object-cover object-center"
+                  />
+
+                  {/* SCAN LINE */}
+                  <div className="absolute inset-0 bg-[linear-gradient(transparent_0%,transparent_calc(50%-1px),var(--cyber-glow-primary)_50%,transparent_calc(50%+1px),transparent_100%)] bg-[length:100%_8px] animate-scanline pointer-events-none" />
+
+                  {/* DECORATIONS ON TOP THE IMAGE */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1/3 left-1/3 w-1/3 h-1/3 border border-primary/40 rounded-full" />
+
+                    {/* Targeting lines */}
+                    <div className="absolute top-1/2 left-0 w-1/4 h-px bg-primary/50" />
+                    <div className="absolute top-1/2 right-0 w-1/4 h-px bg-primary/50" />
+                    <div className="absolute top-0 left-1/2 h-1/4 w-px bg-primary/50" />
+                    <div className="absolute bottom-0 left-1/2 h-1/4 w-px bg-primary/50" />
+                  </div>
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                </div>
+
+                {/* TERMINAL OVERLAY */}
+                <TerminalOverlay />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
+
+      <UserPrograms />
     </div>
   );
-}
+};
+export default HomePage;
