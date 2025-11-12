@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Helper function with retry logic
@@ -198,8 +197,7 @@ export async function generateMealsPlan ( {
         return "Sorry, I couldn’t generate your plan at the moment.";
     }
 }
-=======
-import { GoogleGenerativeAI } from "@google/generative-ai";
+
 
 // Helper function with retry logic
 async function generateWithRetry ( model, prompt, maxRetries = 3, initialDelay = 1000 )
@@ -340,4 +338,3 @@ export async function generateFitnessPlan ({
         return "Sorry, I couldn’t generate your plan at the moment.";
     }
 }
->>>>>>> 3d37cd99ca94feeefc28e7dcee7085e5d5f58f75
