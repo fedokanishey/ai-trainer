@@ -1,13 +1,23 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "./button";
 import { ArrowRightIcon } from "lucide-react";
 import ModalForm from "./inf_form";
 
-export default function ClientModalWrapper() {
+export default function ClientModalWrapper({ title }: { title: string }) {
     const [open, setOpen] = useState(false);
+    const router = useRouter();
     const handleSubmit = (data: unknown) => {
-        console.log("Form submitted:", data);
+        // Convert form data to URL query parameters
+        const params = new URLSearchParams();
+        const formData = data as Record<string, string>;
+        Object.entries(formData).forEach(([key, value]) => {
+            params.append(key, String(value));
+        });
+        // Navigate to generate-program page with form data as query params
+        router.push(`/generate-program?${params.toString()}`);
+        setOpen(false);
     };
 
     return (
@@ -17,7 +27,7 @@ export default function ClientModalWrapper() {
                 size="lg"
                 className="overflow-hidden bg-primary text-primary-foreground px-8 py-6 text-lg font-medium"
                 >
-                Build Your Program
+                {title}
                 <ArrowRightIcon className="ml-2 size-5" />
             </Button>
 

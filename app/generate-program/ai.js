@@ -25,14 +25,14 @@ async function generateWithRetry ( model, prompt, maxRetries = 3, initialDelay =
     }
 }
 
-export async function generateFitnessPlan ({
+export async function generateFitnessPlan ( {
     age,
     height,
     weight,
     injuries,
     workout_days,
     fitness_goal,
-    fitness_level} )
+    fitness_level } )
 {
     try
     {
@@ -91,7 +91,55 @@ export async function generateFitnessPlan ({
         
         DO NOT add any fields that are not in this example. Your response must be a valid JSON object with no additional text.`;
 
-        const dietPrompt = `You are an experienced nutrition coach creating a personalized diet plan based on:
+
+        // Generate AI response with retry logic
+        const responseText = await generateWithRetry( model, prompt );
+        const plan = JSON.parse( responseText );
+
+        // Validate and structure workout plan
+        const validatedPlan = {
+            schedule: plan.schedule,
+            exercises: plan.exercises.map( exercise => ( {
+                day: exercise.day,
+                routines: exercise.routines.map( routine => ( {
+                    name: routine.name,
+                    sets: typeof routine.sets === "number" ? routine.sets : parseInt( routine.sets ) || 1,
+                    reps: typeof routine.reps === "number" ? routine.reps : parseInt( routine.reps ) || 10,
+                } ) ),
+            } ) ),
+        };
+
+        return validatedPlan;
+    } catch ( error )
+    {
+        console.error( "Error generating fitness plan:", error );
+        return "Sorry, I couldn’t generate your plan at the moment.";
+    }
+}
+export async function generateMealsPlan ( {
+    age,
+    height,
+    weight,
+    dietary_restrictions,
+    fitness_goal
+} )
+{
+    try
+    {
+        // Initialize Gemini AI
+        const genAI = new GoogleGenerativeAI( process.env.GEMINI_API_KEY );
+        const model = genAI.getGenerativeModel( {
+            model: "gemini-2.0-flash",
+            generationConfig: {
+                temperature: 0.4,
+                topP: 0.9,
+                responseMimeType: "application/json"
+            }
+        } );
+
+        // Prompt for personalized plan
+
+        const prompt = `You are an experienced nutrition coach creating a personalized diet plan based on:
         Age: ${ age }
         Height: ${ height }
         Weight: ${ weight }
@@ -113,29 +161,39 @@ export async function generateFitnessPlan ({
 
         Return a JSON object with this EXACT structure and no other fields:
         {
-          "dailyCalories": 2000,
-          "meals": [
+            "dailyCalories": 2000,
+            "meals": [
             {
-              "name": "Breakfast",
-              "foods": ["Oatmeal with berries", "Greek yogurt", "Black coffee"]
+                "name": "Breakfast",
+                "foods": ["Oatmeal with berries", "Greek yogurt", "Black coffee"]
             },
             {
-              "name": "Lunch",
-              "foods": ["Grilled chicken salad", "Whole grain bread", "Water"]
+                "name": "Lunch",
+                "foods": ["Grilled chicken salad", "Whole grain bread", "Water"]
             }
-          ]
+            ]
         }
         
         DO NOT add any fields that are not in this example. Your response must be a valid JSON object with no additional text.`;
 
-        
-        // Generate AI response with retry logic
-        const response = await generateWithRetry( model, prompt );
 
-        return response;
+        // Generate AI response with retry logic
+        const responseText = await generateWithRetry( model, prompt );
+        const response = JSON.parse( responseText );
+
+        // Validate and structure diet plan
+        const validatedPlan = {
+            dailyCalories: response.dailyCalories,
+            meals: response.meals.map( meal => ( {
+                name: meal.name,
+                foods: meal.foods,
+            } ) ),
+        };
+
+        return validatedPlan;
     } catch ( error )
     {
-        console.error( "Error generating fitness plan:", error );
+        console.error( "Error generating meals plan:", error );
         return "Sorry, I couldn’t generate your plan at the moment.";
     }
 }

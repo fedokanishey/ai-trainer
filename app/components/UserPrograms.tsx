@@ -11,6 +11,7 @@ import {
   ShieldIcon,
 } from "lucide-react";
 import { USER_PROGRAMS } from "@/constants";
+import ClientModalWrapper from "./ui/ClientModalWrapper";
 
 const UserPrograms = () => {
   return (
@@ -186,15 +187,7 @@ const UserPrograms = () => {
 
         {/* CTA section */}
         <div className="mt-16 text-center">
-          <Link href="/generate-program">
-            <Button
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-lg"
-            >
-              Generate Your Program
-              <Sparkles className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
+          <ClientModalWrapper title={"Generate Your Program"} />
           <p className="text-muted-foreground mt-4">
             Join 500+ users with AI-customized fitness programs
           </p>
