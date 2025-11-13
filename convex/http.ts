@@ -72,7 +72,9 @@ http.route({
       console.log("Error updating user:", error);
       return new Response("Error updating user", { status: 500 });
     }
-  }
+      }
+    
+      
 
     return new Response("Webhook processed", { status: 200 });
 }),
