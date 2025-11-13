@@ -88,13 +88,28 @@ const NavBar = () =>
         </nav>
 
         {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 hover:bg-primary/10 rounded transition-colors"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile Menu Button + UserButton side by side */}
+<div className="md:hidden flex items-center gap-3">
+  {/* زر المينيو */}
+  <button
+    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+    className="p-2 hover:bg-primary/10 rounded transition-colors"
+    aria-label="Toggle menu"
+  >
+    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+  </button>
+
+  {/* الأفاتار */}
+  <UserButton
+    afterSignOutUrl="/"
+    appearance={{
+      elements: {
+        avatarBox: "w-10 h-10",
+      },
+    }}
+  />
+</div>
+
       </div>
       </header>
 
@@ -121,17 +136,13 @@ const NavBar = () =>
               <DumbbellIcon size={16} />
               <span>Generate</span>
             </button>
-            <div className="flex items-center gap-3 text-sm hover:text-primary transition-colors py-2">
-              <UserButton />
-              <Link
-              href="/profile"
-              className="flex items-center gap-1.5 text-sm hover:text-primary transition-colors py-2"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              
-              <span>Profile</span>
-            </Link>
-            </div>
+            <Link
+                href="/profile"
+                className="flex items-center gap-1.5 text-sm hover:text-primary transition-colors"
+              >
+                <UserIcon size={16} />
+                <span>Profile</span>
+              </Link>
           </div>
         </div>
       )}

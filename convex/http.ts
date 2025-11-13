@@ -54,7 +54,25 @@ http.route({
         console.log("Error creating user:", error);
         return new Response("Error creating user", { status: 500 });
         }
+      }
+
+    if (evt.type === "user.updated") {
+        const { id, email_addresses, image_url, first_name, last_name } = evt.data;
+        const email = email_addresses[0].email_address;
+        const name = `${first_name || ""} ${last_name || ""}`.trim();
+
+    try {
+      await ctx.runMutation(api.users.updateUser, {
+        clerkId: id,
+        email,
+        name,
+        image: image_url,
+      });
+    } catch (error) {
+      console.log("Error updating user:", error);
+      return new Response("Error updating user", { status: 500 });
     }
+  }
 
     return new Response("Webhook processed", { status: 200 });
 }),
