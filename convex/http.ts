@@ -7,6 +7,75 @@ import { api } from "./_generated/api";
 
 const http = httpRouter();
 
+// Public HTTP: Get Convex user by Clerk ID
+http.route({
+  path: "/users/get-by-clerk-id",
+  method: "GET",
+  handler: httpAction(async (ctx, req) => {
+    const url = new URL(req.url);
+    const clerkId = url.searchParams.get("clerkId");
+    if (!clerkId) {
+      return new Response(JSON.stringify({ error: "Missing clerkId" }), { status: 400 });
+    }
+    const user = await ctx.runQuery(api.users.getByClerkId, { clerkId });
+    return new Response(JSON.stringify(user ?? null), { status: 200, headers: { "Content-Type": "application/json" } });
+  }),
+});
+
+// Public HTTP: Create a plan
+http.route({
+  path: "/plans/create",
+  method: "POST",
+  handler: httpAction(async (ctx, req) => {
+    try {
+      const body = await req.json();
+      const { userId, name, workoutPlan, dietPlan, isActive } = body ?? {};
+      if (!userId || !name || !workoutPlan || !dietPlan || typeof isActive !== "boolean") {
+        return new Response(JSON.stringify({ error: "Invalid payload" }), { status: 400 });
+      }
+      const id = await ctx.runMutation(api.plans.createPlan, {
+        userId,
+        name,
+        workoutPlan,
+        dietPlan,
+        isActive,
+      });
+      return new Response(JSON.stringify({ id }), { status: 200, headers: { "Content-Type": "application/json" } });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: "Failed to create plan" }), { status: 500 });
+    }
+  }),
+});
+
+// Public HTTP: List plans for a Clerk user
+http.route({
+  path: "/plans/list",
+  method: "GET",
+  handler: httpAction(async (ctx, req) => {
+    const url = new URL(req.url);
+    const clerkId = url.searchParams.get("clerkId");
+    if (!clerkId) {
+      return new Response(JSON.stringify({ error: "Missing clerkId" }), { status: 400 });
+    }
+    const convexUser = await ctx.runQuery(api.users.getByClerkId, { clerkId });
+    if (!convexUser?._id) {
+      return new Response(JSON.stringify([]), { status: 200, headers: { "Content-Type": "application/json" } });
+    }
+    const plans = await ctx.runQuery(api.plans.getUserPlans, { userId: convexUser._id });
+    return new Response(JSON.stringify(plans), { status: 200, headers: { "Content-Type": "application/json" } });
+  }),
+});
+
+// Public HTTP: Run migration for legacy userId strings -> users._id
+http.route({
+  path: "/plans/migrate-user-ids",
+  method: "POST",
+  handler: httpAction(async (ctx) => {
+    const result = await ctx.runMutation(api.plans.migrateLegacyUserIds, {});
+    return new Response(JSON.stringify(result), { status: 200, headers: { "Content-Type": "application/json" } });
+  }),
+});
+
 http.route({
     path: "/clerk-webhook",
     method: "POST",

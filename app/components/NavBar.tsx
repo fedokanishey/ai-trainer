@@ -89,7 +89,7 @@ const NavBar = () =>
 
         {/* Mobile Menu Button */}
         {/* Mobile Menu Button + UserButton side by side */}
-<div className="md:hidden flex items-center gap-3">
+<div className={`md:hidden flex items-center justify-around ${isSignedIn ? 'pr-2.5' : ''} bg-blue-950 rounded-l-full rounded-r-full`}>
   {/* زر المينيو */}
   <button
     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -115,7 +115,7 @@ const NavBar = () =>
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && isSignedIn && (
-        <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border py-4">
+        <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-49  py-4">
           <div className="container mx-auto px-4 flex flex-col gap-3 pt-15">
             <Link
               href="/"
@@ -138,7 +138,8 @@ const NavBar = () =>
             </button>
             <Link
                 href="/profile"
-                className="flex items-center gap-1.5 text-sm hover:text-primary transition-colors"
+              className="flex items-center gap-1.5 text-sm hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
               >
                 <UserIcon size={16} />
                 <span>Profile</span>
@@ -149,7 +150,7 @@ const NavBar = () =>
 
       {/* Mobile Auth Menu */}
       {mobileMenuOpen && !isSignedIn && (
-        <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border py-4">
+        <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-49 py-4">
           <div className="container mx-auto px-4 flex flex-col gap-3 pt-15">
             <SignInButton>
               <Button

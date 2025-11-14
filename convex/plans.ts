@@ -3,7 +3,7 @@ import { v } from "convex/values";
 
 export const createPlan = mutation({
   args: {
-    userId: v.string(),
+    userId: v.id("users"),
     name: v.string(),
     workoutPlan: v.object({
       schedule: v.array(v.string()),
@@ -49,7 +49,7 @@ export const createPlan = mutation({
 });
 
 export const getUserPlans = query({
-  args: { userId: v.string() },
+  args: { userId: v.id("users") },
   handler: async (ctx, args) => {
     const plans = await ctx.db
       .query("plans")
@@ -58,5 +58,30 @@ export const getUserPlans = query({
       .collect();
 
     return plans;
+  },
+});
+
+// Migration: convert legacy string clerkId stored in userId field to proper users _id
+// Safe to run multiple times; will only patch documents where userId was a Clerk string.
+export const migrateLegacyUserIds = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const allPlans = await ctx.db.query("plans").collect();
+    let updated = 0;
+    for (const plan of allPlans) {
+      // Access userId loosely because legacy documents may have stored a Clerk string
+      const current: unknown = (plan as unknown as { userId: unknown }).userId;
+      // If it's already an Id object Convex returns (type object), skip.
+      if (typeof current !== "string") continue;
+      // current holds a Clerk userId string; find matching user by clerkId index.
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_clerk_id", (q) => q.eq("clerkId", current))
+        .first();
+      if (!user) continue;
+      await ctx.db.patch(plan._id, { userId: user._id });
+      updated++;
+    }
+    return { updated };
   },
 });
