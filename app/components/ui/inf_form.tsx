@@ -19,7 +19,7 @@ export default function ModalForm({ open, onClose, onSubmit }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-51 flex items-center overflow-y-scroll scroll-smooth justify-center bg-black/70 backdrop-blur-sm max-h-fit"
+      className="fixed inset-0 z-55 flex items-center overflow-hidden justify-center bg-black/70 backdrop-blur-sm max-h-fit"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose(); 
       }}
@@ -38,7 +38,7 @@ export default function ModalForm({ open, onClose, onSubmit }: Props) {
         </div>
 
         {/* FORM */}
-        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4 max-h-[80vh] overflow-y-auto">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium">Age</label>
