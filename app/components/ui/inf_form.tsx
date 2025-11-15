@@ -19,7 +19,7 @@ export default function ModalForm({ open, onClose, onSubmit }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-55 flex items-center overflow-hidden justify-center bg-black/70 backdrop-blur-sm max-h-fit"
+      className="fixed inset-0 z-1000 flex items-center overflow-hidden justify-center bg-black/70 backdrop-blur-sm max-h-screen"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose(); 
       }}
