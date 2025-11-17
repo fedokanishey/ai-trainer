@@ -32,7 +32,12 @@ export async function generateFitnessPlan ( {
     injuries,
     workout_days,
     fitness_goal,
-    fitness_level } )
+    fitness_level,
+    gender,
+    sports,
+    additional_instructions,
+    measurement_unit,
+} )
 {
     try
     {
@@ -52,15 +57,19 @@ export async function generateFitnessPlan ( {
         Age: ${ age }
         Height: ${ height }
         Weight: ${ weight }
+        Gender: ${ gender }
         Injuries or limitations: ${ injuries }
         Available days for workout: ${ workout_days }
         Fitness goal: ${ fitness_goal }
         Fitness level: ${ fitness_level }
+        Favorite or practiced sports: ${ sports }
+        Additional instructions from the user: ${ additional_instructions }
         
         As a professional coach:
         - Consider muscle group splits to avoid overtraining the same muscles on consecutive days
         - Design exercises that match the fitness level and account for any injuries
         - Structure the workouts to specifically target the user's fitness goal
+        - When referencing any weights or quantities, prefer the measurement unit: ${ measurement_unit } (if applicable)
         
         CRITICAL SCHEMA INSTRUCTIONS:
         - Your output MUST contain ONLY the fields specified below, NO ADDITIONAL FIELDS
@@ -121,7 +130,11 @@ export async function generateMealsPlan ( {
     height,
     weight,
     dietary_restrictions,
-    fitness_goal
+    fitness_goal,
+    gender,
+    sports,
+    additional_instructions,
+    measurement_unit,
 } )
 {
     try
@@ -143,14 +156,18 @@ export async function generateMealsPlan ( {
         Age: ${ age }
         Height: ${ height }
         Weight: ${ weight }
+        Gender: ${ gender }
         Fitness goal: ${ fitness_goal }
         Dietary restrictions: ${ dietary_restrictions }
+        Favorite or practiced sports: ${ sports }
+        Additional instructions from the user: ${ additional_instructions }
         
         As a professional nutrition coach:
         - Calculate appropriate daily calorie intake based on the person's stats and goals
         - Create a balanced meal plan with proper macronutrient distribution
         - Include a variety of nutrient-dense foods while respecting dietary restrictions
         - Consider meal timing around workouts for optimal performance and recovery
+        - Include specific portion quantities using the measurement unit: ${ measurement_unit } (for example: "150 ${ measurement_unit } grilled chicken")
         
         CRITICAL SCHEMA INSTRUCTIONS:
         - Your output MUST contain ONLY the fields specified below, NO ADDITIONAL FIELDS
@@ -158,6 +175,7 @@ export async function generateMealsPlan ( {
         - DO NOT add fields like "supplements", "macros", "notes", or ANYTHING else
         - ONLY include the EXACT fields shown in the example below
         - Each meal should include ONLY a "name" and "foods" array
+        - If you include quantities for foods, embed them as part of the food string using ${ measurement_unit }
 
         Return a JSON object with this EXACT structure and no other fields:
         {

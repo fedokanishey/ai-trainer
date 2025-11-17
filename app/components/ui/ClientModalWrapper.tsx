@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Button } from "./button";
 import { ArrowRightIcon } from "lucide-react";
@@ -31,7 +32,10 @@ export default function ClientModalWrapper({ title }: { title: string }) {
                 <ArrowRightIcon className="ml-2 size-5" />
             </Button>
 
-        <ModalForm open={open} onClose={() => setOpen(false)} onSubmit={handleSubmit} />
+                {open && typeof document !== "undefined" ? createPortal(
+                    <ModalForm open={open} onClose={() => setOpen(false)} onSubmit={handleSubmit} />,
+                    document.body
+                ) : null}
         </>
     );
 }

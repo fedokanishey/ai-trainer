@@ -26,6 +26,10 @@ export default async function Program({ searchParams }: PageProps) {
   const fitness_goal = params.fitness_goal || 'Weight Loss';
   const fitness_level = params.fitness_level || 'Intermediate';
   const dietary_restrictions = params.dietary_restrictions || '';
+  const gender = params.gender || 'Male';
+  const additional_instructions = params.additional_instructions || '';
+  const sports = params.sports || '';
+  const measurement_unit = params.measurement_unit || 'grams';
 
   type WorkoutPlan = { schedule: string[]; exercises: { day: string; routines: { name: string; sets: number; reps: number; }[] }[] } | null;
   type DietPlan = { dailyCalories: number; meals: { name: string; foods: string[] }[] } | null;
@@ -45,14 +49,22 @@ export default async function Program({ searchParams }: PageProps) {
         injuries,
         workout_days,
         fitness_goal,
-        fitness_level
+        fitness_level,
+        gender,
+        sports,
+        additional_instructions,
+        measurement_unit,
       }),
       generateMealsPlan({
         age,
         height,
         weight,
         dietary_restrictions,
-        fitness_goal
+        fitness_goal,
+        gender,
+        sports,
+        additional_instructions,
+        measurement_unit,
       })
     ]);
 
@@ -147,6 +159,10 @@ export default async function Program({ searchParams }: PageProps) {
           <h2 className="text-2xl font-bold mb-4">Your Information</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-sm">
             <div>
+              <p className="text-gray-400">Gender</p>
+              <p className="text-lg font-semibold">{gender}</p>
+            </div>
+            <div>
               <p className="text-gray-400">Age</p>
               <p className="text-lg font-semibold">{age}</p>
             </div>
@@ -180,6 +196,24 @@ export default async function Program({ searchParams }: PageProps) {
               <div>
                 <p className="text-gray-400">Dietary Restrictions</p>
                 <p className="text-lg font-semibold">{dietary_restrictions}</p>
+              </div>
+            )}
+            {sports && (
+              <div>
+                <p className="text-gray-400">Sports</p>
+                <p className="text-lg font-semibold">{sports}</p>
+              </div>
+            )}
+            {additional_instructions && (
+              <div className="md:col-span-2 lg:col-span-4">
+                <p className="text-gray-400">Additional Instructions</p>
+                <p className="text-lg font-semibold whitespace-pre-wrap">{additional_instructions}</p>
+              </div>
+            )}
+            {measurement_unit && (
+              <div>
+                <p className="text-gray-400">Measurement Unit</p>
+                <p className="text-lg font-semibold">{measurement_unit}</p>
               </div>
             )}
           </div>

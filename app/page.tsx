@@ -1,10 +1,7 @@
 import TerminalOverlay from "./components/TerminalOverlay";
-// import { Button } from "./components/ui/button";
 import UserPrograms from "./components/UserPrograms";
-// import { ArrowRightIcon } from "lucide-react";
 import ClientModalWrapper from "./components/ui/ClientModalWrapper";
 
-// import Link from "next/link";
 
 const HomePage = () => {
   return (
@@ -61,7 +58,7 @@ const HomePage = () => {
 
               {/* BUTTON */}
               <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                <ClientModalWrapper title={"Build Your Program"} />
+                <ClientModalWrapper title={ "Build Your Program" } />
               </div>
             </div>
 
