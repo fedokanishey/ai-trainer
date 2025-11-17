@@ -23,11 +23,11 @@ type FormValues = {
 };
 
 const DEFAULTS: FormValues = {
-  age: "30",
-  height: "170",
-  weight: "60",
+  age: "",
+  height: "",
+  weight: "",
   injuries: "",
-  workout_days: "4",
+  workout_days: "",
   fitness_goal: "Weight Loss",
   fitness_level: "Intermediate",
   dietary_restrictions: "",
