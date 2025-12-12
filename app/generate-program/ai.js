@@ -1,17 +1,38 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// Direct API implementation without GoogleGenerativeAI SDK
 
-// Helper function with retry logic
-async function generateWithRetry ( model, prompt, maxRetries = 3, initialDelay = 1000 )
+// Helper function with retry logic using direct API
+async function generateWithRetry ( apiKey, model, prompt, maxRetries = 3, initialDelay = 1000 )
 {
     for ( let attempt = 1; attempt <= maxRetries; attempt++ )
     {
         try
         {
-            const result = await model.generateContent( prompt );
-            return result.response.text();
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/${ model }:generateContent?key=${ apiKey }`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify( {
+                        contents: [ { parts: [ { text: prompt } ] } ],
+                        generationConfig: {
+                            temperature: 0.4,
+                            topP: 0.9
+                        }
+                    } )
+                }
+            );
+
+            if ( !response.ok )
+            {
+                const error = await response.json();
+                throw new Error( `API Error: ${ response.status } - ${ JSON.stringify( error ) }` );
+            }
+
+            const data = await response.json();
+            return data.candidates[ 0 ].content.parts[ 0 ].text;
         } catch ( error )
         {
-            if ( error.status === 429 && attempt < maxRetries )
+            if ( error.message.includes( '429' ) && attempt < maxRetries )
             {
                 // Rate limited - wait before retrying
                 const delay = initialDelay * Math.pow( 2, attempt - 1 ); // Exponential backoff
@@ -41,16 +62,8 @@ export async function generateFitnessPlan ( {
 {
     try
     {
-        // Initialize Gemini AI
-        const genAI = new GoogleGenerativeAI( process.env.GEMINI_API_KEY );
-        const model = genAI.getGenerativeModel( {
-            model: "gemini-2.0-flash",
-            generationConfig: {
-                temperature: 0.4,
-                topP: 0.9,
-                responseMimeType: "application/json"
-            }
-        } );
+        const apiKey = process.env.GEMINI_API_KEY;
+        const modelName = "gemini-flash-lite-latest";
 
         // Prompt for personalized plan
         const prompt = `You are an experienced fitness coach creating a personalized workout plan based on:
@@ -102,7 +115,7 @@ export async function generateFitnessPlan ( {
 
 
         // Generate AI response with retry logic
-        const responseText = await generateWithRetry( model, prompt );
+        const responseText = await generateWithRetry( apiKey, modelName, prompt );
         const plan = JSON.parse( responseText );
 
         // Validate and structure workout plan
@@ -139,16 +152,8 @@ export async function generateMealsPlan ( {
 {
     try
     {
-        // Initialize Gemini AI
-        const genAI = new GoogleGenerativeAI( process.env.GEMINI_API_KEY );
-        const model = genAI.getGenerativeModel( {
-            model: "gemini-2.0-flash",
-            generationConfig: {
-                temperature: 0.4,
-                topP: 0.9,
-                responseMimeType: "application/json"
-            }
-        } );
+        const apiKey = process.env.GEMINI_API_KEY;
+        const modelName = "gemini-flash-lite-latest";
 
         // Prompt for personalized plan
 
@@ -196,7 +201,7 @@ export async function generateMealsPlan ( {
 
 
         // Generate AI response with retry logic
-        const responseText = await generateWithRetry( model, prompt );
+        const responseText = await generateWithRetry( apiKey, modelName, prompt );
         const response = JSON.parse( responseText );
 
         // Validate and structure diet plan
